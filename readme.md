@@ -1,5 +1,9 @@
 # logdna_export_cli
 
+This command will recursively fetch all logs from the logdna export API.
+
+This is useful to get logs beyond the 10,000 line limit as the API does not natively provide pagination.
+  
 ## Install
 ```
 pip3 install logdna_line_export
