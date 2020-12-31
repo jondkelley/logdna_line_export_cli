@@ -1,4 +1,4 @@
-# logdna_export_cli
+# logdna_line_export_cli
 
 This command will recursively fetch all logs from the logdna export API.
 
@@ -10,7 +10,7 @@ pip3 install logdna_line_export
 
 #or
 
-python setup.py install
+python3 setup.py install
 
 # If your system has Python dependency issues, use virtual python environments!
 pip3 install virtualenv
