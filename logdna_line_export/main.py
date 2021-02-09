@@ -46,11 +46,11 @@ def get_batch_recursively(query, tfrom, tto, hostname, service_key):
               help='From date, must be any ISO-8601 compatible date [i.e. 2020-12-01T10:05:45-06:00] or UNIX Epoch in seconds',
               required=True)
 @click.option('-t', '--totime', 'to_time',
-              help='Optional from date, must be any ISO-8601 compatible date [i.e. 2020-12-01T10:05:45-06:00] or UNIX Epoch in seconds',
+              help='Optional, To date, must be any ISO-8601 compatible date [i.e. 2020-12-01T10:05:45-06:00] or UNIX Epoch in seconds',
               default=int(round(now())),
               required=False)
 @click.option('-h', '--host', 'hostname',
-              help='Optional change the default LogDNA API host endpoint [default: api.logdna.com]',
+              help='Optional, change the default LogDNA API host endpoint [default: api.logdna.com]',
               default='api.logdna.com',
               required=False)
 @click.option('-p', '--print-date', 'print_date',
