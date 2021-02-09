@@ -8,7 +8,7 @@ NAME = "logdna_line_export"
 if __name__ == "__main__":
     setup(
         name=NAME,
-        version="0.0.2",
+        version="0.1.0",
         author="Jonathan Kelley",
         author_email="jonathan.kelley@logdna.com",
         url="https://github.com/jondkelley/logdna_line_export_cli",

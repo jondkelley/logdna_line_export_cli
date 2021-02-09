@@ -7,33 +7,42 @@ import dateutil.parser
 from time import time as now
 from time import mktime
 import datetime
+import sys
 
+# set recursion limit to 1000^3
+sys.setrecursionlimit(1000**3)
 
-def get_batch_recursively(query, tfrom, tto, hostname, service_key):
+def fetch_batch(tfrom, tto, query, hostname, service_key):
     """
-    recursively fetch the log export batches
+    perform export API request
     """
+    payload = {
+        'from': tfrom,
+        'to': tto,
+        'query': query,
+        'prefer': 'head'
+    }
+    r = get_url(f'https://{hostname}/v1/export',
+                params=payload,
+                auth=(service_key, ''))
+    return r
+
+def iterate_batch(query, tfrom, tto, hostname, service_key):
+    """
+    recursive generator to fetch the log export batches
+    """
+    print(iteration)
     if tfrom >= tto:
         return 1
     else:
-        ###print(f'get {tfrom} {tto}')
-        payload = {
-            'from': tfrom,
-            'to': tto,
-            'query': query,
-            'prefer': 'head'
-        }
-        r = get_url(f'https://{hostname}/v1/export',
-                    params=payload,
-                    auth=(service_key, ''))
+        r = fetch_batch(tfrom, tto, query, hostname, service_key)
         if r.text is not None:
             for line in r.text.split('\n'):
                 if not (re.match(r'^\s*$', line)):
                     json_line = json.loads(line)
-                    print(json_line)
                     tfrom = json_line['_ts'] + 1
-        get_batch_recursively(query, tfrom, tto, hostname, service_key)
-
+                    yield json_line
+        yield from iterate_batch(query, tfrom, tto, hostname, service_key)
 
 @click.command()
 @click.option('-q', '--query', 'query',
@@ -92,4 +101,5 @@ def entry(query, service_key, from_time, to_time, hostname, print_date):
             to_time = dateutil.parser.isoparse(to_time)
             print(f'to: {to_time} (ISO-8601)')
     else:
-        get_batch_recursively(query, from_time, to_time, hostname, service_key)
+        for i in iterate_batch(query, from_time, to_time, hostname, service_key):
+          print(i)
